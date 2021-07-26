@@ -1,8 +1,9 @@
-// import './TeamPage.css';
+import './TeamPage.scss';
 import React, { useEffect, useState } from 'react';
 import { MatchDetailCard } from '../components/MatchDetailCard';
 import { MatchSmallCard } from '../components/MatchSmallCard';
 import { useParams } from 'react-router-dom';
+import { PieChart } from 'react-minimal-pie-chart';
 
 export const TeamPage = () => {
 
@@ -32,8 +33,26 @@ export const TeamPage = () => {
 
     return (
         <div className="TeamPage">
-            <h1>{team.teamName}</h1>
-            {matches}
+            <div className="team-name-section">
+                <h1 className="team-name">{team.teamName}</h1>
+            </div>
+            <div className="win-loss-section">
+                <p>Win/Losses</p>
+                <PieChart
+                    data={[
+                        { title: 'Wins', value: Number(team.totalWins), color: '#4da376' },
+                        { title: 'Losses', value: Number(team.totalMatches-team.totalWins), color: '#a44d5d' },
+                    ]}
+                />
+            </div>
+            <div className="match-detail-section">
+                <h3>Latest Matches</h3>
+                {matches[0]}
+            </div>
+            {matches.slice(1)}
+            <div className="more-link">
+                <a href="#link">More &gt;</a>
+            </div>
         </div>
     );
 }
