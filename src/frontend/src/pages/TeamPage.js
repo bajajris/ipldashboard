@@ -11,15 +11,16 @@ export const TeamPage = () => {
     const { teamName } = useParams();
     useEffect(() => {
         const fetchMatches = async () => {
-            const response = await fetch(`http://localhost:8080/team/${teamName}`);
+            const response = await fetch(`${process.env.REACT_APP_API_ROOT_URL}/team/${teamName}`);
             const data = await response.json();
-            console.log(data);
             setTeam(data)
         }
         fetchMatches();
     }, [teamName]);
 
     let matches = "Team Not Found!"
+    let wins = 0
+    let losses = 0 
 
     if (team && team.teamName) {
         matches = team.matches.map((match, idx) => {
@@ -29,6 +30,9 @@ export const TeamPage = () => {
                 return <MatchSmallCard key={idx} teamName={team.teamName} match={match} />
             }
         })
+
+        wins = Number(team.totalWins)
+        losses = Number(team.totalMatches-team.totalWins)
     }
 
     return (
@@ -40,8 +44,8 @@ export const TeamPage = () => {
                 <p>Win/Losses</p>
                 <PieChart
                     data={[
-                        { title: 'Wins', value: Number(team.totalWins), color: '#4da376' },
-                        { title: 'Losses', value: Number(team.totalMatches-team.totalWins), color: '#a44d5d' },
+                        { title: 'Wins', value: wins, color: '#4da376' },
+                        { title: 'Losses', value: losses, color: '#a44d5d' },
                     ]}
                 />
             </div>
